@@ -37,7 +37,7 @@ def convert_image(data: bytes) -> (bytes, int, int):
         else:
             w = int(w / (h / 256))
             h = 256
-    return data, w, h
+    return new_file.getvalue(), w, h
 
 
 def add_to_index(name: str, output_dir: str) -> None:
@@ -56,7 +56,7 @@ def add_to_index(name: str, output_dir: str) -> None:
         print(f"Added {name} to {index_path}")
 
 
-def make_sticker(mxc: str, width: int, height: int, size: int,
+def make_sticker(mxc: str, preview: str, width: int, height: int, size: int,
                  body: str = "") -> matrix.StickerInfo:
     return {
         "body": body,
@@ -65,15 +65,15 @@ def make_sticker(mxc: str, width: int, height: int, size: int,
             "w": width,
             "h": height,
             "size": size,
-            "mimetype": "image/apng",
+            "mimetype": "image/gif",
 
             # Element iOS compatibility hack
-            "thumbnail_url": mxc,
+            "thumbnail_url": preview,
             "thumbnail_info": {
                 "w": width,
                 "h": height,
                 "size": size,
-                "mimetype": "image/apng",
+                "mimetype": "image/png",
             },
         },
         "msgtype": "m.sticker",
