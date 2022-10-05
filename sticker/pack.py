@@ -79,7 +79,7 @@ async def upload_sticker(file: str, directory: str, old_stickers: Dict[str, matr
     else:
         preview_image_data, width, height = util.convert_image(image_data)
         print(".", end="", flush=True)
-        mxc = await matrix.upload(image_data, "image/gif", file)
+        mxc = await matrix.upload(image_data, "image/png", file)
         mxco = await matrix.upload(preview_image_data, "image/png", file)
         print(".", end="", flush=True)
         sticker = util.make_sticker(mxc, width, height, len(image_data), name)
