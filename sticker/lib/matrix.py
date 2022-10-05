@@ -15,6 +15,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from typing import Optional, TYPE_CHECKING
 import json
+import aiohttp
 
 from aiohttp import ClientSession
 from yarl import URL
@@ -76,7 +77,7 @@ async def load_config(path: str) -> None:
 
 async def whoami(url: URL, access_token: str) -> str:
     headers = {"Authorization": f"Bearer {access_token}"}
-    async with ClientSession() as sess, sess.get(url, headers=headers) as resp:
+    async with ClientSession(connector=aiohttp.TCPConnector(verify_ssl=False)) as sess, sess.get(url, headers=headers) as resp:
         resp.raise_for_status()
         user_id = (await resp.json())["user_id"]
         print(f"Access token validated (user ID: {user_id})")
@@ -86,5 +87,5 @@ async def whoami(url: URL, access_token: str) -> str:
 async def upload(data: bytes, mimetype: str, filename: str) -> str:
     url = upload_url.with_query({"filename": filename})
     headers = {"Content-Type": mimetype, "Authorization": f"Bearer {access_token}"}
-    async with ClientSession() as sess, sess.post(url, data=data, headers=headers) as resp:
+    async with ClientSession(connector=aiohttp.TCPConnector(verify_ssl=False)) as sess, sess.post(url, data=data, headers=headers) as resp:
         return (await resp.json())["content_uri"]
