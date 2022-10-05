@@ -37,7 +37,7 @@ def convert_image(data: bytes) -> (bytes, int, int):
         else:
             w = int(w / (h / 256))
             h = 256
-    return new_file.getvalue(), w, h
+    return data, w, h
 
 
 def add_to_index(name: str, output_dir: str) -> None:
@@ -65,7 +65,7 @@ def make_sticker(mxc: str, width: int, height: int, size: int,
             "w": width,
             "h": height,
             "size": size,
-            "mimetype": "image/png",
+            "mimetype": "image/apng",
 
             # Element iOS compatibility hack
             "thumbnail_url": mxc,
@@ -73,7 +73,7 @@ def make_sticker(mxc: str, width: int, height: int, size: int,
                 "w": width,
                 "h": height,
                 "size": size,
-                "mimetype": "image/png",
+                "mimetype": "image/apng",
             },
         },
         "msgtype": "m.sticker",
