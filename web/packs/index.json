@@ -1,6 +1,5 @@
 {
   "packs": [
-    "CultOfTheLambStickers.json",
     "CultOfTheLambGifs.json"
   ],
   "homeserver_url": "https://matrix.middian.cz"
