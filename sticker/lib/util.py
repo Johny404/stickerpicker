@@ -19,13 +19,20 @@ import os.path
 import json
 
 from PIL import Image
+from apng import APNG
 
 from . import matrix
 
 open_utf8 = partial(open, encoding='UTF-8')
 
 def convert_image(data: bytes) -> (bytes, int, int):
-    image: Image.Image = Image.open(BytesIO(data)).convert("RGBA")
+    im = APNG.open(BytesIO(data))
+    first_image = BytesIO()
+    for i, (png, control) in enumerate(im.frames):
+        png.save(first_image)
+        break
+    (png, control) = im.frames.pop(0)
+    image: Image.Image = Image.open(first_image).convert("RGBA")
     new_file = BytesIO()
     image.save(new_file, "png")
     w, h = image.size
@@ -56,7 +63,7 @@ def add_to_index(name: str, output_dir: str) -> None:
         print(f"Added {name} to {index_path}")
 
 
-def make_sticker(mxc: str, width: int, height: int, size: int,
+def make_sticker(mxc: str, thumb: str, width: int, height: int, size: int,
                  body: str = "") -> matrix.StickerInfo:
     return {
         "body": body,
@@ -68,12 +75,12 @@ def make_sticker(mxc: str, width: int, height: int, size: int,
             "mimetype": "image/apng",
 
             # Element iOS compatibility hack
-            "thumbnail_url": mxc,
+            "thumbnail_url": thumb,
             "thumbnail_info": {
                 "w": width,
                 "h": height,
                 "size": size,
-                "mimetype": "image/apng",
+                "mimetype": "image/png",
             },
         },
         "msgtype": "m.sticker",
