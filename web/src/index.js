@@ -336,7 +336,7 @@ const NavBarItem = ({ pack, iconOverride = null }) => html`
 			${iconOverride ? html`
 				<span class="icon icon-${iconOverride}"/>
 			` : html`
-				<img src=${makeThumbnailURL(pack.stickers[0].url)}
+				<img src=${makeThumbnailURL(pack.stickers[0].info.thumbnail_url)}
 					alt=${pack.stickers[0].body} class="visible" />
 			`}
 		</div>
